@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Google Cloud architect — enterprise migrations, GKE platforms, Google SecOps, Apigee, reCAPTCHA Enterprise. 12+ years across financial services, payments, and SaaS.">
+<title>Vivek Kataria — Google Cloud Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:    #f7f6f2;
+    --paper-2:  #ffffff;
+    --grid:     rgba(28, 60, 120, 0.055);
+    --grid-b:   rgba(28, 60, 120, 0.10);
+    --ink:      #14181f;
+    --ink-2:    #4a5160;
+    --ink-3:    #8a8f9c;
+    --blue:     #1d4ed8;
+    --blue-2:   #1e40af;
+    --blue-w:   #e3eafd;
+    --rule:     #d8d6ce;
+    --rule-2:   #b9b6ab;
+    --display:  'Space Grotesk', sans-serif;
+    --body:     'IBM Plex Sans', sans-serif;
+    --mono:     'IBM Plex Mono', monospace;
+  }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body {
+    background:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+      var(--paper);
+    background-size: 28px 28px, 28px 28px, auto;
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--blue); color: #fff; }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
+
+  /* ── technical drawing helpers ── */
+  .frame {
+    border: 1.5px solid var(--ink);
+    background: var(--paper-2);
+    position: relative;
+  }
+  .frame::before, .frame::after,
+  .frame > .cm::before, .frame > .cm::after {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--blue);
+    border-style: solid;
+    border-width: 0;
+  }
+  .frame::before      { top:-7px;   left:-7px;   border-top-width:1.5px; border-left-width:1.5px; }
+  .frame::after       { top:-7px;   right:-7px;  border-top-width:1.5px; border-right-width:1.5px; }
+  .frame > .cm::before{ bottom:-7px; left:-7px;  border-bottom-width:1.5px; border-left-width:1.5px; }
+  .frame > .cm::after { bottom:-7px; right:-7px; border-bottom-width:1.5px; border-right-width:1.5px; }
+
+  .fig {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--blue);
+  }
+  .dim {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-3); letter-spacing: .1em;
+  }
+  .dim::before, .dim::after {
+    content:''; flex:1; height:1px;
+    background: var(--rule-2);
+  }
+
+  /* ── NAV ── */
+  header {
+    position: sticky; top:0; z-index:60;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1.5px solid var(--ink);
+  }
+  .nav { display:flex; align-items:center; justify-content:space-between; height:66px; }
+  .brand {
+    font-family: var(--display);
+    font-weight: 600; font-size: 17px;
+    color: var(--ink); text-decoration:none;
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand-mark {
+    width: 26px; height: 26px;
+    border: 1.5px solid var(--ink);
+    position: relative;
+    background: var(--paper-2);
+  }
+  .brand-mark::before {
+    content:''; position:absolute; inset:5px;
+    border:1.5px solid var(--blue);
+  }
+  .nav-links { display:flex; gap:1.8rem; align-items:center; }
+  .nav-links a {
+    font-family: var(--mono); font-size: 12.5px;
+    color: var(--ink-2); text-decoration:none;
+    letter-spacing:.04em;
+    transition: color .15s;
+  }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-cta {
+    font-family: var(--mono) !important;
+    background: var(--ink); color: var(--paper) !important;
+    padding: 8px 18px;
+    transition: background .15s !important;
+  }
+  .nav-cta:hover { background: var(--blue); color:#fff !important; }
+
+  /* ── HERO ── */
+  .hero { padding: clamp(70px, 10vh, 120px) 0 70px; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 60px;
+    align-items: start;
+  }
+  .hero-kicker {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 30px;
+    border: 1px solid var(--blue);
+    background: var(--blue-w);
+    padding: 6px 14px;
+  }
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(40px, 6vw, 76px);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -.03em;
+    margin-bottom: 30px;
+  }
+  h1 .outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--ink);
+  }
+  h1 .accent { color: var(--blue); }
+  .hero-sub {
+    font-size: 17.5px; font-weight: 300;
+    color: var(--ink-2);
+    max-width: 56ch; line-height: 1.75;
+    margin-bottom: 40px;
+  }
+  .hero-sub strong { font-weight: 500; color: var(--ink); }
+  .hero-cta { display:flex; gap:14px; flex-wrap:wrap; }
+  .btn {
+    display:inline-flex; align-items:center; gap:10px;
+    font-family: var(--mono); font-size: 13.5px;
+    padding: 13px 26px;
+    text-decoration:none;
+    border: 1.5px solid var(--ink);
+    transition: all .15s;
+  }
+  .btn-solid { background: var(--ink); color: var(--paper); }
+  .btn-solid:hover { background: var(--blue); border-color: var(--blue); color:#fff; }
+  .btn-line { background: var(--paper-2); color: var(--ink); }
+  .btn-line:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* spec sheet card */
+  .spec-sheet { padding: 26px; }
+  .spec-sheet .fig { display:block; margin-bottom: 18px; }
+  .spec-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 11px 0;
+    border-bottom: 1px dashed var(--rule);
+    gap: 12px;
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-key { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); letter-spacing:.06em; }
+  .spec-val { font-family: var(--display); font-size: 15px; font-weight: 500; text-align: right; }
+  .spec-val.hl { color: var(--blue); }
+
+  /* ── SECTION SCAFFOLD ── */
+  section { padding: 90px 0; }
+  .sec-head { margin-bottom: 54px; }
+  .sec-head .fig { display:block; margin-bottom: 14px; }
+  .sec-title {
+    font-family: var(--display);
+    font-size: clamp(28px, 3.6vw, 44px);
+    font-weight: 600; letter-spacing: -.02em;
+    line-height: 1.1;
+  }
+  .sec-title span { color: var(--blue); }
+
+  /* ── SERVICES (drawings) ── */
+  .svc-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .svc { padding: 30px 28px 26px; transition: transform .2s; }
+  .svc:hover { transform: translateY(-3px); }
+  .svc-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 20px; }
+  .svc-icon { width: 46px; height: 46px; }
+  .svc-icon svg { width:100%; height:100%; }
+  .svc-title {
+    font-family: var(--display);
+    font-size: 20px; font-weight: 600;
+    line-height: 1.25; margin-bottom: 12px;
+  }
+  .svc-desc { font-size: 14px; color: var(--ink-2); line-height: 1.7; margin-bottom: 20px; font-weight:300; }
+  .svc-list { list-style:none; border-top: 1.5px solid var(--ink); padding-top: 6px; }
+  .svc-list li {
+    font-family: var(--mono);
+    font-size: 12px; color: var(--ink-2);
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--rule);
+    display:flex; gap: 10px;
+  }
+  .svc-list li:last-child { border-bottom:none; }
+  .svc-list li::before { content:'+'; color: var(--blue); font-weight:500; }
+
+  /* ── CASE STUDIES (plates) ── */
+  .plates { display: flex; flex-direction: column; gap: 30px; }
+  .plate { padding: 0; overflow:hidden; }
+  .plate-inner { display: grid; grid-template-columns: 1fr 300px; }
+  .plate-main { padding: 36px 40px; }
+  .plate-side {
+    border-left: 1.5px solid var(--ink);
+    background:
+      linear-gradient(var(--grid-b) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-b) 1px, transparent 1px),
+      var(--blue-w);
+    background-size: 14px 14px, 14px 14px, auto;
+    padding: 36px 30px;
+    display:flex; flex-direction:column; justify-content:center; gap: 30px;
+  }
+  .plate-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 16px; gap:16px; flex-wrap:wrap; }
+  .plate-sector { font-family: var(--mono); font-size: 11px; letter-spacing:.15em; text-transform:uppercase; color: var(--ink-3); }
+  .plate-title {
+    font-family: var(--display);
+    font-size: 24px; font-weight: 600;
+    letter-spacing: -.01em; line-height: 1.25;
+    margin-bottom: 14px; max-width: 26ch;
+  }
+  .plate-body { font-size: 14.5px; font-weight:300; color: var(--ink-2); line-height: 1.75; max-width: 58ch; margin-bottom: 22px; }
+  .plate-chips { display:flex; flex-wrap:wrap; gap: 7px; }
+  .chip {
+    font-family: var(--mono); font-size: 11px;
+    border: 1px solid var(--rule-2);
+    background: var(--paper);
+    color: var(--ink-2);
+    padding: 3px 10px;
+  }
+  .metric-num {
+    font-family: var(--display);
+    font-size: 44px; font-weight: 700;
+    color: var(--blue-2); line-height: .95;
+    letter-spacing: -.02em;
+    margin-bottom: 7px;
+  }
+  .metric-label { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; max-width: 22ch; }
+
+  /* ── EXPERTISE (schedule table) ── */
+  .sched { }
+  .sched-row {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    border-bottom: 1px solid var(--rule);
+    padding: 22px 26px;
+    gap: 30px;
+    transition: background .15s;
+  }
+  .sched-row:last-child { border-bottom:none; }
+  .sched-row:hover { background: var(--blue-w); }
+  .sched-cat {
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing:.1em; text-transform: uppercase;
+    color: var(--blue); padding-top: 3px;
+  }
+  .sched-items { display:flex; flex-wrap:wrap; gap: 8px 24px; }
+  .sched-items span { font-size: 14.5px; color: var(--ink-2); font-weight:300; white-space:nowrap; }
+  .sched-items span b { color: var(--ink); font-weight: 500; }
+
+  /* ── CREDENTIALS strip ── */
+  .creds { padding: 0; }
+  .creds-band {
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 44px 0;
+  }
+  .creds-flex { display:flex; align-items:center; gap: 20px 44px; flex-wrap:wrap; }
+  .creds-flex .fig { color: #7ea2f5; }
+  .cred-item { display:flex; align-items:baseline; gap:10px; }
+  .cred-item .n { font-family: var(--display); font-weight:600; font-size:15px; color:#fff; }
+  .cred-item .o { font-family: var(--mono); font-size:11px; color:#9aa3b5; letter-spacing:.06em; }
+
+  /* ── OSS index ── */
+  .oss-table { }
+  .oss-row {
+    display: grid;
+    grid-template-columns: 60px 300px 1fr 60px;
+    align-items: center;
+    gap: 24px;
+    padding: 17px 26px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    transition: background .15s;
+  }
+  .oss-row:last-child { border-bottom: none; }
+  .oss-row:hover { background: var(--blue-w); }
+  .oss-no { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .oss-name { font-family: var(--mono); font-size: 13.5px; font-weight:500; color: var(--ink); }
+  .oss-desc { font-size: 13px; color: var(--ink-3); font-weight:300; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .oss-go { font-family: var(--mono); color: var(--blue); text-align:right; transition: transform .15s; }
+  .oss-row:hover .oss-go { transform: translateX(4px); }
+  .oss-foot { margin-top: 22px; }
+
+  /* ── CONTACT ── */
+  .contact { padding: 110px 0 90px; }
+  .contact-frame { padding: clamp(38px, 6vw, 70px); text-align:center; }
+  .contact h2 {
+    font-family: var(--display);
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 600; letter-spacing:-.025em;
+    line-height: 1.08; margin: 18px 0 22px;
+  }
+  .contact h2 span { color: var(--blue); }
+  .contact-sub {
+    font-size: 16px; font-weight:300; color: var(--ink-2);
+    max-width: 52ch; margin: 0 auto 38px; line-height: 1.75;
+  }
+  .contact-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+  footer { border-top: 1.5px solid var(--ink); padding: 26px 0; background: var(--paper-2); }
+  .foot { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap: 10px; }
+  .foot-l { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); letter-spacing:.08em; }
+  .foot-r { display:flex; gap: 22px; }
+  .foot-r a { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); text-decoration:none; letter-spacing:.06em; }
+  .foot-r a:hover { color: var(--blue); }
+
+  /* reveal */
+  .rv { opacity:0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+  .rv.in { opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .rv{opacity:1;transform:none;transition:none;} }
+
+  @media (max-width: 960px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 34px; }
+    .spec-sheet { max-width: 420px; }
+    .svc-grid { grid-template-columns: 1fr; }
+    .plate-inner { grid-template-columns: 1fr; }
+    .plate-side { border-left:none; border-top: 1.5px solid var(--ink); flex-direction: row; justify-content: space-around; }
+    .sched-row { grid-template-columns: 1fr; gap: 10px; padding: 20px 18px; }
+    .oss-row { grid-template-columns: 40px 1fr 40px; }
+    .oss-desc { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><span class="brand-mark"></span>Vivek Kataria</a>
+    <nav class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#work">Case studies</a>
+      <a href="#expertise">Expertise</a>
+      <a href="#writing">Redlines</a>
+      <a href="#oss">Open source</a>
+      <a class="nav-cta" href="mailto:vrkataria91@gmail.com">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-kicker rv">Google Cloud Architect</div>
+      <h1 class="rv">Cloud platforms,<br><span class="outline">drawn to</span> <span class="accent">spec.</span></h1>
+      <p class="hero-sub rv">
+        I design and deliver <strong>Google Cloud architecture</strong> for enterprises
+        in financial services, payments, and SaaS — migrations that land on time,
+        security built on Google's own stack, and platforms teams can actually run.
+        <strong>12+ years</strong> in cloud infrastructure, currently the architecture
+        authority across 30+ enterprise GCP environments at a Google Cloud Premier Partner.
+      </p>
+      <div class="hero-cta rv">
+        <a class="btn btn-solid" href="mailto:vrkataria91@gmail.com">Get in touch ↗</a>
+        <a class="btn btn-line" href="#work">View case studies</a>
+      </div>
+    </div>
+    <div class="frame spec-sheet rv"><span class="cm"></span>
+      <span class="fig">Fig. 00 — Spec sheet</span>
+      <div class="spec-row"><span class="spec-key">DISCIPLINE</span><span class="spec-val">Cloud architecture</span></div>
+      <div class="spec-row"><span class="spec-key">PLATFORM</span><span class="spec-val hl">Google Cloud</span></div>
+      <div class="spec-row"><span class="spec-key">EXPERIENCE</span><span class="spec-val">12+ years</span></div>
+      <div class="spec-row"><span class="spec-key">ENVIRONMENTS</span><span class="spec-val">30+ enterprise</span></div>
+      <div class="spec-row"><span class="spec-key">SPECIALISMS</span><span class="spec-val">SecOps · Apigee · GKE</span></div>
+      <div class="spec-row"><span class="spec-key">CREDENTIALS</span><span class="spec-val">PCA · CKA · Terraform</span></div>
+      <div class="spec-row"><span class="spec-key">STATUS</span><span class="spec-val hl">Accepting engagements</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="dim rv">SCALE 1:1 — ALL WORK DRAWN FROM PRODUCTION EXPERIENCE</div></div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="fig">Fig. 01 — Services</span>
+      <h2 class="sec-title">What I <span>design & deliver</span></h2>
+    </div>
+    <div class="svc-grid">
+
+      <div class="frame svc rv"><span class="cm"></span>
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 46 46" fill="none">
+              <rect x="3" y="3" width="18" height="18" stroke="#14181f" stroke-width="1.5"/>
+              <rect x="25" y="25" width="18" height="18" stroke="#1d4ed8" stroke-width="1.5"/>
+              <path d="M21 12 H33 V25" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="3 3"/>
+            </svg>
+          </div>
+          <span class="fig">S/01</span>
+        </div>
+        <div class="svc-title">Architecture & migration</div>
+        <p class="svc-desc">Complex moves to Google Cloud, owned end to end — discovery, landing zone, cutover — on Terraform standards proven across dozens of enterprise environments.</p>
+        <ul class="svc-list">
+          <li>Landing zones & org design</li>
+          <li>VMware / on-prem → GKE</li>
+          <li>Multi-region & DR design</li>
+          <li>Terraform IaC standards</li>
+          <li>FinOps & cost optimisation</li>
+        </ul>
+      </div>
+
+      <div class="frame svc rv"><span class="cm"></span>
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 46 46" fill="none">
+              <path d="M23 4 L40 11 V22 C40 32 33 39 23 42 C13 39 6 32 6 22 V11 Z" stroke="#14181f" stroke-width="1.5"/>
+              <path d="M16 22 L21 27 L30 17" stroke="#1d4ed8" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <span class="fig">S/02</span>
+        </div>
+        <div class="svc-title">Cloud security engineering</div>
+        <p class="svc-desc">Security on Google's own stack — SIEM consolidation into Google SecOps, YARA-L detection engineering, API protection with Apigee, bot defence with reCAPTCHA Enterprise.</p>
+        <ul class="svc-list">
+          <li>Multi-SIEM → Google SecOps</li>
+          <li>YARA-L / MITRE ATT&CK detections</li>
+          <li>Apigee — OAuth, quotas, policies</li>
+          <li>reCAPTCHA Enterprise + Cloud Armor</li>
+          <li>SCC Premium rollout</li>
+        </ul>
+      </div>
+
+      <div class="frame svc rv"><span class="cm"></span>
+        <div class="svc-head">
+          <div class="svc-icon">
+            <svg viewBox="0 0 46 46" fill="none">
+              <circle cx="23" cy="23" r="19" stroke="#14181f" stroke-width="1.5"/>
+              <path d="M23 10 V23 L33 29" stroke="#1d4ed8" stroke-width="1.8"/>
+              <circle cx="23" cy="23" r="2.5" fill="#1d4ed8"/>
+            </svg>
+          </div>
+          <span class="fig">S/03</span>
+        </div>
+        <div class="svc-title">Platform & reliability</div>
+        <p class="svc-desc">Reliability as a design input — GKE platforms with SLOs built in, observability that shortens incidents, and runbooks a team can operate at 3am.</p>
+        <ul class="svc-list">
+          <li>Private GKE platform design</li>
+          <li>SLOs & burn-rate alerting</li>
+          <li>Prometheus · Grafana · EFK</li>
+          <li>Incident & runbook design</li>
+          <li>24×7 operating model</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="work">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="fig">Fig. 02 — Case studies</span>
+      <h2 class="sec-title">Built, shipped, <span>measured</span></h2>
+    </div>
+    <div class="plates">
+
+      <div class="frame plate rv"><span class="cm"></span>
+        <div class="plate-inner">
+          <div class="plate-main">
+            <div class="plate-top">
+              <span class="plate-sector">Financial services · Migration</span>
+              <span class="fig">Plate 01</span>
+            </div>
+            <div class="plate-title">VMware estate → Google Kubernetes Engine</div>
+            <p class="plate-body">
+              Re-architected a monolithic on-premises VMware estate into containerised
+              services on GKE — Terraform-managed infrastructure, multi-region failover,
+              zero-downtime cutover for revenue-critical workloads.
+            </p>
+            <div class="plate-chips">
+              <span class="chip">GKE</span><span class="chip">Terraform</span>
+              <span class="chip">Shared VPC</span><span class="chip">Cloud SQL</span>
+              <span class="chip">Multi-region DR</span>
+            </div>
+          </div>
+          <div class="plate-side">
+            <div><div class="metric-num">−25%</div><div class="metric-label">infrastructure cost post-migration</div></div>
+            <div><div class="metric-num">0 min</div><div class="metric-label">downtime during cutover</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame plate rv"><span class="cm"></span>
+        <div class="plate-inner">
+          <div class="plate-main">
+            <div class="plate-top">
+              <span class="plate-sector">Enterprise security · SIEM</span>
+              <span class="fig">Plate 02</span>
+            </div>
+            <div class="plate-title">Multi-SIEM consolidation into Google SecOps</div>
+            <p class="plate-body">
+              Consolidated fragmented in-house SIEM tooling into Google SecOps with
+              SCC Premium integration — custom UDM parsers, log feeds over GCS and
+              Pub/Sub, and a YARA-L detection library mapped to MITRE ATT&CK.
+            </p>
+            <div class="plate-chips">
+              <span class="chip">Google SecOps</span><span class="chip">Chronicle</span>
+              <span class="chip">YARA-L 2.0</span><span class="chip">SCC Premium</span>
+              <span class="chip">MITRE ATT&CK</span>
+            </div>
+          </div>
+          <div class="plate-side">
+            <div><div class="metric-num">1</div><div class="metric-label">unified detection platform, replacing fragmented tools</div></div>
+            <div><div class="metric-num">100%</div><div class="metric-label">critical log sources normalised to UDM</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame plate rv"><span class="cm"></span>
+        <div class="plate-inner">
+          <div class="plate-main">
+            <div class="plate-top">
+              <span class="plate-sector">SaaS · Conversational AI</span>
+              <span class="fig">Plate 03</span>
+            </div>
+            <div class="plate-title">AI support agent on Dialogflow CX</div>
+            <p class="plate-body">
+              Designed an AI-powered support agent on Dialogflow CX with Cloud Functions
+              fulfilment and asynchronous ticket processing over Pub/Sub — integrated
+              with the client's SaaS platform and CRM.
+            </p>
+            <div class="plate-chips">
+              <span class="chip">Dialogflow CX</span><span class="chip">Cloud Functions</span>
+              <span class="chip">Pub/Sub</span><span class="chip">Firestore</span>
+            </div>
+          </div>
+          <div class="plate-side">
+            <div><div class="metric-num">−35%</div><div class="metric-label">average customer response time</div></div>
+            <div><div class="metric-num">−40%</div><div class="metric-label">escalations to human agents</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame plate rv"><span class="cm"></span>
+        <div class="plate-inner">
+          <div class="plate-main">
+            <div class="plate-top">
+              <span class="plate-sector">Payments · Platform modernisation</span>
+              <span class="fig">Plate 04</span>
+            </div>
+            <div class="plate-title">On-premise SaaS → Kubernetes, zero-downtime releases</div>
+            <p class="plate-body">
+              Migrated a high-volume payments platform to Kubernetes using the
+              strangler-fig pattern — centralised EFK observability and a CI/CD
+              pipeline that replaced 45-minute outage windows with zero-downtime deploys.
+            </p>
+            <div class="plate-chips">
+              <span class="chip">Kubernetes</span><span class="chip">Terraform</span>
+              <span class="chip">Helm</span><span class="chip">EFK</span>
+              <span class="chip">CI/CD</span>
+            </div>
+          </div>
+          <div class="plate-side">
+            <div><div class="metric-num">45→8</div><div class="metric-label">deployment minutes — now zero-downtime</div></div>
+            <div><div class="metric-num">−40%</div><div class="metric-label">troubleshooting time via central observability</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="fig">Fig. 03 — Technical schedule</span>
+      <h2 class="sec-title">The <span>stack</span></h2>
+    </div>
+    <div class="frame sched rv"><span class="cm"></span>
+      <div class="sched-row">
+        <div class="sched-cat">GCP core</div>
+        <div class="sched-items">
+          <span><b>GKE</b> — private, Workload Identity</span>
+          <span><b>Landing zones</b> — org policy, IAM</span>
+          <span>Cloud Run</span><span>Cloud SQL</span>
+          <span>BigQuery</span><span>Pub/Sub</span><span>Cloud Build</span>
+        </div>
+      </div>
+      <div class="sched-row">
+        <div class="sched-cat">Security</div>
+        <div class="sched-items">
+          <span><b>Google SecOps</b> — YARA-L 2.0, UDM</span>
+          <span><b>Apigee X</b> — OAuth, traffic policy</span>
+          <span><b>reCAPTCHA Enterprise</b></span>
+          <span>SCC Premium</span><span>Cloud Armor</span>
+        </div>
+      </div>
+      <div class="sched-row">
+        <div class="sched-cat">Platform / SRE</div>
+        <div class="sched-items">
+          <span><b>Terraform</b> — module design</span>
+          <span><b>Kubernetes</b> — GKE, EKS, Helm</span>
+          <span>SLOs & error budgets</span>
+          <span>Prometheus</span><span>Grafana</span><span>Fluentd</span>
+        </div>
+      </div>
+      <div class="sched-row">
+        <div class="sched-cat">AI on GCP</div>
+        <div class="sched-items">
+          <span><b>Dialogflow CX</b></span>
+          <span>Agent Builder</span><span>Vertex AI</span>
+          <span>Cloud Functions fulfilment</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CREDENTIALS -->
+<div class="creds rv">
+  <div class="creds-band">
+    <div class="wrap creds-flex">
+      <span class="fig">Fig. 04 — Credentials</span>
+      <div class="cred-item"><span class="n">Professional Cloud Architect</span><span class="o">Google Cloud</span></div>
+      <div class="cred-item"><span class="n">Associate Cloud Engineer</span><span class="o">Google Cloud</span></div>
+      <div class="cred-item"><span class="n">CKA</span><span class="o">CNCF</span></div>
+      <div class="cred-item"><span class="n">Terraform Associate</span><span class="o">HashiCorp</span></div>
+      <div class="cred-item"><span class="n">CCNA</span><span class="o">Cisco</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- REDLINES -->
+<section id="writing">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="fig">Fig. 05 — Redlines</span>
+      <h2 class="sec-title">Marking up the <span>official record</span></h2>
+    </div>
+    <div class="frame oss-table rv"><span class="cm"></span>
+      <a class="oss-row" href="https://medium.com/@vrkataria91" target="_blank" rel="noopener">
+        <span class="oss-no">R-01</span><span class="oss-name">Google SecOps — practitioner notes on recent changes</span>
+        <span class="oss-desc">Field-level changes, detection engineering, what breaks</span><span class="oss-go">→</span>
+      </a>
+      <a class="oss-row" href="https://medium.com/@vrkataria91" target="_blank" rel="noopener">
+        <span class="oss-no">R-02</span><span class="oss-name">GCP infrastructure — what actually matters from each release</span>
+        <span class="oss-desc">GKE, Terraform, Apigee — operational implications, not recaps</span><span class="oss-go">→</span>
+      </a>
+      <a class="oss-row" href="https://medium.com/@vrkataria91" target="_blank" rel="noopener">
+        <span class="oss-no">R-03</span><span class="oss-name">Agentic AI — frameworks for thinking clearly about the concept</span>
+        <span class="oss-desc">Theory and mental models, grounded in real GCP AI features</span><span class="oss-go">→</span>
+      </a>
+      <a class="oss-row" href="https://medium.com/@vrkataria91" target="_blank" rel="noopener">
+        <span class="oss-no">R-04</span><span class="oss-name">Full redline set on Medium</span>
+        <span class="oss-desc">New annotations published every few days</span><span class="oss-go">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN SOURCE -->
+<section id="oss">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="fig">Fig. 06 — Drawing index</span>
+      <h2 class="sec-title">Reference work, <span>in public</span></h2>
+    </div>
+    <div class="frame oss-table rv"><span class="cm"></span>
+      <a class="oss-row" href="https://github.com/vrk91/gcp-landing-zone-terraform" target="_blank" rel="noopener">
+        <span class="oss-no">D-01</span><span class="oss-name">gcp-landing-zone-terraform</span>
+        <span class="oss-desc">Shared VPC, org policies, IAM factory, log sinks</span><span class="oss-go">→</span>
+      </a>
+      <a class="oss-row" href="https://github.com/vrk91/google-secops-study" target="_blank" rel="noopener">
+        <span class="oss-no">D-02</span><span class="oss-name">google-secops-study</span>
+        <span class="oss-desc">YARA-L detections, UDM parsers, SOAR playbooks</span><span class="oss-go">→</span>
+      </a>
+      <a class="oss-row" href="https://github.com/vrk91/recaptcha-enterprise-study" target="_blank" rel="noopener">
+        <span class="oss-no">D-03</span><span class="oss-name">recaptcha-enterprise-study</span>
+        <span class="oss-desc">Assessment API verification, risk-score thresholds</span><span class="oss-go">→</span>
+      </a>
+      <a class="oss-row" href="https://github.com/vrk91/gke-platform-study" target="_blank" rel="noopener">
+        <span class="oss-no">D-04</span><span class="oss-name">gke-platform-study</span>
+        <span class="oss-desc">Private GKE, Workload Identity, SLO-as-code</span><span class="oss-go">→</span>
+      </a>
+      <a class="oss-row" href="https://github.com/vrk91/dialogflow-cx-chatbot-study" target="_blank" rel="noopener">
+        <span class="oss-no">D-05</span><span class="oss-name">dialogflow-cx-chatbot-study</span>
+        <span class="oss-desc">CX webhooks, Pub/Sub async processing, Firestore</span><span class="oss-go">→</span>
+      </a>
+      <a class="oss-row" href="https://github.com/vrk91?tab=repositories" target="_blank" rel="noopener">
+        <span class="oss-no">D-06</span><span class="oss-name">full index — ten repositories</span>
+        <span class="oss-desc">Observability, Cloud Run, Fluentd, EKS, monitoring</span><span class="oss-go">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="frame contact-frame rv"><span class="cm"></span>
+      <span class="fig">Fig. 07 — Next project</span>
+      <h2>Let's put your cloud <span>on the drawing board.</span></h2>
+      <p class="contact-sub">
+        I take on a small number of architecture, security, and platform
+        engagements. The best first step is a short conversation about
+        what you're building.
+      </p>
+      <div class="contact-btns">
+        <a class="btn btn-solid" href="mailto:vrkataria91@gmail.com">Email me ↗</a>
+        <a class="btn btn-line" href="https://linkedin.com/in/vivek-r-kataria" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        <a class="btn btn-line" href="https://medium.com/@vrkataria91" target="_blank" rel="noopener">Review my redlines</a>
+        <a class="btn btn-line" href="https://github.com/vrk91" target="_blank" rel="noopener">Review my GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="foot-l">© 2025 VIVEK KATARIA — GOOGLE CLOUD ARCHITECT</span>
+    <div class="foot-r">
+      <a href="mailto:vrkataria91@gmail.com">Email</a>
+      <a href="https://linkedin.com/in/vivek-r-kataria" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://medium.com/@vrkataria91" target="_blank" rel="noopener">Redlines</a>
+      <a href="https://github.com/vrk91" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .1 });
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
